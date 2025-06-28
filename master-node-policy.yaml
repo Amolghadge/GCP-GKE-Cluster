@@ -1,0 +1,45 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: master-node-policy
+  namespace: default
+spec:
+  podSelector:
+    matchLabels:
+      role: master
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  # Allow Kubernetes API traffic
+  - from:
+    - namespaceSelector: {}
+    ports:
+    - protocol: TCP
+      port: 6443
+    - protocol: TCP
+      port: 2379
+    - protocol: TCP
+      port: 2380
+    - protocol: TCP
+      port: 10250
+    - protocol: TCP
+      port: 10251
+    - protocol: TCP
+      port: 10252
+  # Allow monitoring traffic
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: kube-system
+    ports:
+    - protocol: TCP
+      port: 10250
+  egress:
+  # Allow all egress for master node operations
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 1-65535
+    - protocol: UDP
+      port: 1-65535
