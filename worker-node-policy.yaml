@@ -1,3 +1,4 @@
+# worker-node-policy-fixed.yaml
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
@@ -47,7 +48,7 @@ spec:
     ports:
     - protocol: TCP
       port: 80
-  # Allow communication to master nodes
+  # Allow communication to master nodes (no port restrictions)
   - to:
     - podSelector:
         matchLabels:
