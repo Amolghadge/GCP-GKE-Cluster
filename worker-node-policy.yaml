@@ -1,0 +1,54 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: worker-node-policy
+  namespace: default
+spec:
+  podSelector:
+    matchLabels:
+      role: worker
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  # Allow traffic from load balancer and ingress
+  - from: []
+    ports:
+    - protocol: TCP
+      port: 80
+    - protocol: TCP
+      port: 443
+  # Allow kubelet traffic
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: kube-system
+    ports:
+    - protocol: TCP
+      port: 10250
+  # Allow inter-pod communication
+  - from:
+    - podSelector: {}
+  egress:
+  # Allow DNS
+  - to: []
+    ports:
+    - protocol: UDP
+      port: 53
+    - protocol: TCP
+      port: 53
+  # Allow HTTPS traffic
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 443
+  # Allow HTTP traffic
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 80
+  # Allow communication to master nodes
+  - to:
+    - podSelector:
+        matchLabels:
+          role: master
