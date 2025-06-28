@@ -1,3 +1,4 @@
+# network-policy-egress-fixed.yaml
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
@@ -22,7 +23,7 @@ spec:
     ports:
     - protocol: TCP
       port: 443
-  # Allow HTTP for external services (if needed)
+  # Allow HTTP for external services
   - to: []
     ports:
     - protocol: TCP
@@ -35,9 +36,6 @@ spec:
     ports:
     - protocol: TCP
       port: 443
-  # Allow internal cluster communication
+  # Allow internal cluster communication (no port restrictions)
   - to:
     - podSelector: {}
-    ports:
-    - protocol: TCP
-      port: 1-65535
