@@ -1,3 +1,4 @@
+# network-policy-ingress-fixed.yaml
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
@@ -24,10 +25,10 @@ spec:
     ports:
     - protocol: TCP
       port: 80
-  # Allow traffic from specific external sources (adjust as needed)
+  # Allow traffic from specific external sources
   - from:
     - ipBlock:
-        cidr: 0.0.0.0/0  # Allow from anywhere - restrict as needed
+        cidr: 0.0.0.0/0
         except:
         - 169.254.169.254/32  # Block metadata server
     ports:
